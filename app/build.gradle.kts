@@ -80,9 +80,6 @@ dependencies {
     implementation(libs.wear.compose.foundation)
     implementation(libs.wear.compose.navigation)
 
-    // Horologist
-    implementation(libs.horologist.compose.layout)
-
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWearMaterial3Api::class)
+
 package com.vidv13.dashcode.ui.detail
 
 import android.app.Activity
@@ -24,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.material3.CircularProgressIndicator
+import androidx.wear.compose.material3.ExperimentalWearMaterial3Api
 import androidx.wear.compose.material3.Text
 
 @Composable

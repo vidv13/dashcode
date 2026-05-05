@@ -22,8 +22,6 @@ compose-bom = "2025.05.00"
 # Wear
 wear-compose-material3 = "1.5.0"
 wear-compose = "1.5.0"
-horologist = "0.7.15"
-
 # DI
 hilt = "2.59.1"
 hilt-navigation-compose = "1.2.0"
@@ -74,9 +72,6 @@ compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 wear-compose-material3 = { group = "androidx.wear.compose", name = "compose-material3", version.ref = "wear-compose-material3" }
 wear-compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "wear-compose" }
 wear-compose-navigation = { group = "androidx.wear.compose", name = "compose-navigation", version.ref = "wear-compose" }
-
-# Horologist
-horologist-compose-layout = { group = "com.google.android.horologist", name = "horologist-compose-layout", version.ref = "horologist" }
 
 # Hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
