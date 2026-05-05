@@ -47,7 +47,7 @@ play-services-auth = "21.3.0"
 play-services-wearable = "18.2.0"
 
 # Code quality
-ktlint-gradle = "12.1.1"
+ktlint-gradle = "14.2.0"
 
 # Testing
 junit-jupiter = "5.11.4"
