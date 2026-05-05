@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         // Same applicationId as the watch app so Wearable Data Layer pairs them automatically
-        applicationId = "com.vidv13.dashcode"
+        applicationId = "com.vernonit.dashcode"
         minSdk = 26
         targetSdk = libs.versions.targetSdk.get().toInt()
         versionCode = 1
