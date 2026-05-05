@@ -35,6 +35,9 @@ jobs:
       - name: Run lint
         run: ./gradlew lintDebug
 
+      - name: Check code style
+        run: ./gradlew ktlintCheck
+
   deploy:
     runs-on: ubuntu-latest
     needs: build

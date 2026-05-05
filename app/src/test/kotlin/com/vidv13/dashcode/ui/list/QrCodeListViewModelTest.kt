@@ -7,7 +7,9 @@ import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -34,18 +36,20 @@ class QrCodeListViewModelTest {
     }
 
     @Test
-    fun `codes emits empty list initially`() = runTest {
+    fun `codes starts with empty list before any subscriber`() = runTest {
         every { repository.getAll() } returns flowOf(emptyList())
         val viewModel = QrCodeListViewModel(repository)
         assertTrue(viewModel.codes.value.isEmpty())
     }
 
     @Test
-    fun `codes emits list from repository`() = runTest {
+    fun `codes emits list from repository when subscribed`() = runTest {
         val codes = listOf(QrCode(id = 1, name = "Gym", content = "gym"))
         every { repository.getAll() } returns flowOf(codes)
         val viewModel = QrCodeListViewModel(repository)
-        testDispatcher.scheduler.advanceUntilIdle()
+        // WhileSubscribed only collects upstream while there is an active subscriber
+        backgroundScope.launch { viewModel.codes.collect {} }
+        advanceUntilIdle()
         assertEquals(codes, viewModel.codes.value)
     }
 }
