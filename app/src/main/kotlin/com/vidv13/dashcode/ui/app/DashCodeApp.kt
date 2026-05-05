@@ -1,18 +1,33 @@
 package com.vidv13.dashcode.ui.app
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.wear.compose.material3.Text
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
+import androidx.wear.compose.navigation.SwipeDismissableNavHost
+import androidx.wear.compose.navigation.composable
+import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import com.vidv13.dashcode.navigation.Screen
+import com.vidv13.dashcode.ui.detail.QrCodeDetailScreen
+import com.vidv13.dashcode.ui.list.QrCodeListScreen
 
 @Composable
 fun DashCodeApp() {
-    Box(
-        modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center,
+    val navController = rememberSwipeDismissableNavController()
+
+    SwipeDismissableNavHost(
+        navController = navController,
+        startDestination = Screen.List.route,
     ) {
-        Text("DashCode")
+        composable(Screen.List.route) {
+            QrCodeListScreen(onCodeClick = { id ->
+                navController.navigate(Screen.Detail.createRoute(id))
+            })
+        }
+        composable(
+            route = Screen.Detail.route,
+            arguments = listOf(navArgument("codeId") { type = NavType.LongType }),
+        ) {
+            QrCodeDetailScreen()
+        }
     }
 }
