@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -26,21 +30,45 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build debug APK
-        id: build_apk
-        run: ./gradlew assembleDebug --stacktrace 2>&1 | tee /tmp/build.log; exit ${PIPESTATUS[0]}
+      - name: Build watch app debug APK
+        id: build_app
+        run: ./gradlew :app:assembleDebug --stacktrace 2>&1 | tee /tmp/app-build.log; exit ${PIPESTATUS[0]}
+
+      - name: Build companion app debug APK
+        id: build_mobile
+        if: success() || steps.build_app.outcome == 'failure'
+        run: ./gradlew :mobile:assembleDebug --stacktrace 2>&1 | tee /tmp/mobile-build.log; exit ${PIPESTATUS[0]}
+
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            /tmp/app-build.log
+            /tmp/mobile-build.log
 
       - name: Post build error to PR
-        if: failure() && steps.build_apk.outcome == 'failure'
+        if: failure() && github.event_name == 'pull_request'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          body=$(tail -100 /tmp/build.log | python3 -c "import sys,json; print(json.dumps('Build failed:\n```\n'+sys.stdin.read()+'\n```'))")
-          curl -s -X POST \
-            -H "Authorization: token $GH_TOKEN" \
-            -H "Content-Type: application/json" \
-            -d "{\"body\":${body}}" \
-            "https://api.github.com/repos/vidv13/dashcode/issues/1/comments"
+          {
+            printf '## Build failed\n\n'
+            if [ -f /tmp/app-build.log ]; then
+              printf '### Watch app\n```\n'
+              tail -80 /tmp/app-build.log
+              printf '\n```\n\n'
+            fi
+            if [ -f /tmp/mobile-build.log ]; then
+              printf '### Companion app\n```\n'
+              tail -80 /tmp/mobile-build.log
+              printf '\n```\n'
+            fi
+          } > /tmp/comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --repo "${{ github.repository }}" \
+            --body-file /tmp/comment.md
 
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest
