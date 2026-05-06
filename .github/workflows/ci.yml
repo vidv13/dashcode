@@ -27,7 +27,20 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace
+        id: build_apk
+        run: ./gradlew assembleDebug --stacktrace 2>&1 | tee /tmp/build.log; exit ${PIPESTATUS[0]}
+
+      - name: Post build error to PR
+        if: failure() && steps.build_apk.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          body=$(tail -100 /tmp/build.log | python3 -c "import sys,json; print(json.dumps('Build failed:\n```\n'+sys.stdin.read()+'\n```'))")
+          curl -s -X POST \
+            -H "Authorization: token $GH_TOKEN" \
+            -H "Content-Type: application/json" \
+            -d "{\"body\":${body}}" \
+            "https://api.github.com/repos/vidv13/dashcode/issues/1/comments"
 
       - name: Run unit tests
         run: ./gradlew testDebugUnitTest
