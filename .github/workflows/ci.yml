@@ -55,16 +55,15 @@ jobs:
         run: |
           {
             printf '## Build failed\n\n'
-            if [ -f /tmp/app-build.log ]; then
-              printf '### Watch app\n```\n'
-              tail -80 /tmp/app-build.log
+            for module in app mobile; do
+              log="/tmp/${module}-build.log"
+              [ -f "$log" ] || continue
+              printf '### %s — compiler errors\n```\n' "$module"
+              grep -E "^e: |error:|Unresolved reference|None of the following|cannot find|is not applicable" "$log" | head -60
+              printf '\n```\n\n### %s — last 20 lines\n```\n' "$module"
+              tail -20 "$log"
               printf '\n```\n\n'
-            fi
-            if [ -f /tmp/mobile-build.log ]; then
-              printf '### Companion app\n```\n'
-              tail -80 /tmp/mobile-build.log
-              printf '\n```\n'
-            fi
+            done
           } > /tmp/comment.md
           gh pr comment "${{ github.event.pull_request.number }}" \
             --repo "${{ github.repository }}" \
