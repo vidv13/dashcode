@@ -1,10 +1,11 @@
-@file:OptIn(ExperimentalWearMaterial3Api::class)
+@file:OptIn(ExperimentalWearMaterial3Api::class, ExperimentalWearFoundationApi::class)
 
 package com.vidv13.dashcode.ui.app
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
+import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.material3.ExperimentalWearMaterial3Api
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable

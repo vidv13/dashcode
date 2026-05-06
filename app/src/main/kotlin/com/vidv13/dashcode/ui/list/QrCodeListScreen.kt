@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalWearMaterial3Api::class)
+@file:OptIn(ExperimentalWearMaterial3Api::class, ExperimentalWearFoundationApi::class)
 
 package com.vidv13.dashcode.ui.list
 
@@ -12,6 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.material3.Button
