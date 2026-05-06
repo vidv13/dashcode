@@ -1,4 +1,4 @@
-@file:OptIn(ExperimentalWearMaterial3Api::class, ExperimentalWearFoundationApi::class)
+@file:OptIn(ExperimentalWearComposeMaterial3Api::class, ExperimentalWearFoundationApi::class)
 
 package com.vidv13.dashcode.ui.list
 
@@ -16,7 +16,7 @@ import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.material3.Button
-import androidx.wear.compose.material3.ExperimentalWearMaterial3Api
+import androidx.wear.compose.material3.ExperimentalWearComposeMaterial3Api
 import androidx.wear.compose.material3.ListHeader
 import androidx.wear.compose.material3.Text
 import com.vidv13.dashcode.data.local.QrCode
