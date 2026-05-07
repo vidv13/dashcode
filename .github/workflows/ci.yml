@@ -104,17 +104,17 @@ jobs:
         run: printf '%s' "$SERVICE_ACCOUNT_JSON" > $RUNNER_TEMP/play-service-account.json
 
       - name: Upload watch app to Play Store (internal track)
-        uses: r0adkll/upload-google-play@v3
+        uses: r0adkll/upload-google-play@v1.1.5
         with:
           serviceAccountJson: ${{ runner.temp }}/play-service-account.json
           packageName: com.vernonit.dashcode
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          tracks: internal
+          track: internal
 
       - name: Upload companion app to Play Store (internal track)
-        uses: r0adkll/upload-google-play@v3
+        uses: r0adkll/upload-google-play@v1.1.5
         with:
           serviceAccountJson: ${{ runner.temp }}/play-service-account.json
           packageName: com.vernonit.dashcode
           releaseFiles: mobile/build/outputs/bundle/release/mobile-release.aab
-          tracks: internal
+          track: internal
