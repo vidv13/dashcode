@@ -22,3 +22,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "dashcode"
 include(":app")
+include(":mobile")

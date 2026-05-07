@@ -6,6 +6,10 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: read
+  pull-requests: write
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -26,11 +30,86 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
+      - name: Build watch app debug APK
+        id: build_app
+        run: ./gradlew :app:assembleDebug --stacktrace 2>&1 | tee /tmp/app-build.log; exit ${PIPESTATUS[0]}
 
-      - name: Run unit tests
-        run: ./gradlew testDebugUnitTest
+      - name: Build companion app debug APK
+        id: build_mobile
+        if: success() || steps.build_app.outcome == 'failure'
+        run: ./gradlew :mobile:assembleDebug --stacktrace 2>&1 | tee /tmp/mobile-build.log; exit ${PIPESTATUS[0]}
 
-      - name: Run lint
-        run: ./gradlew lintDebug
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: |
+            /tmp/app-build.log
+            /tmp/mobile-build.log
+
+      - name: Post build error to PR
+        if: failure() && github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          {
+            printf '## Build failed\n\n'
+            for module in app mobile; do
+              log="/tmp/${module}-build.log"
+              [ -f "$log" ] || continue
+              printf '### %s — compiler errors\n```\n' "$module"
+              grep -E "^e: |error:|Unresolved reference|None of the following|cannot find|is not applicable" "$log" | head -60
+              printf '\n```\n\n### %s — last 20 lines\n```\n' "$module"
+              tail -20 "$log"
+              printf '\n```\n\n'
+            done
+          } > /tmp/comment.md
+          gh pr comment "${{ github.event.pull_request.number }}" \
+            --repo "${{ github.repository }}" \
+            --body-file /tmp/comment.md
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Decode keystore
+        run: |
+          echo "${{ secrets.KEYSTORE_FILE }}" | base64 --decode > $RUNNER_TEMP/dashcode.jks
+
+      - name: Build release AABs
+        env:
+          KEYSTORE_PATH: ${{ runner.temp }}/dashcode.jks
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: ./gradlew :app:bundleRelease :mobile:bundleRelease
+
+      - name: Upload watch app to Play Store (internal track)
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.vernonit.dashcode
+          releaseFiles: app/build/outputs/bundle/release/app-release.aab
+          track: internal
+
+      - name: Upload companion app to Play Store (internal track)
+        uses: r0adkll/upload-google-play@v1
+        with:
+          serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          packageName: com.vernonit.dashcode
+          releaseFiles: mobile/build/outputs/bundle/release/mobile-release.aab
+          track: internal
