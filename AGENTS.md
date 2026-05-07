@@ -1,6 +1,14 @@
 # Agent Instructions
 
-This project uses **bd** (beads) for issue tracking. Run `bd onboard` to get started.
+- This project uses **bd** (beads) for issue tracking. Run `bd onboard` to get started.
+
+- Never assume you are the only one working on this project.
+
+- Do not begin work on new features if the build is broken.
+- Do not begin work on new features if the tests are not passing.
+- Do not begin work on new features if the linter is not passing.
+- It is okay to stop and ask me if you are unsure of what to do.
+  - like if you can't see the result of a build - ask for permission.
 
 ## Quick Reference
 
