@@ -1,0 +1,8 @@
+Starting server with Config HP="127.0.0.1:59821"|T="28800000"|R="false"|L="warning"
+time="2026-05-06T20:17:49-04:00" level=warning msg="secure_file_priv is set to \"\", which is insecure."
+time="2026-05-06T20:17:49-04:00" level=warning msg="Any user with GRANT FILE privileges will be able to read any file which the sql-server process can read."
+time="2026-05-06T20:17:49-04:00" level=warning msg="Please consider restarting the server with secure_file_priv set to a safe (or non-existent) directory."
+time="2026-05-06T20:17:50-04:00" level=warning msg="error running query" connectTime="2026-05-06 20:17:49.888653 -0400 EDT m=+0.679055834" connectionDb=beads_dashcode connectionID=4 error="Duplicate key name 'idx_wisp_dep_type'" queryTime="2026-05-06 20:17:50.863957 -0400 EDT m=+1.654367692"
+time="2026-05-06T20:17:50-04:00" level=warning msg="error running query" connectTime="2026-05-06 20:17:49.888653 -0400 EDT m=+0.679055834" connectionDb=beads_dashcode connectionID=4 error="Duplicate key name 'idx_wisp_dep_type_depends'" queryTime="2026-05-06 20:17:50.864732 -0400 EDT m=+1.655142144"
+time="2026-05-06T20:17:50-04:00" level=warning msg="error running query" connectTime="2026-05-06 20:17:49.888653 -0400 EDT m=+0.679055834" connectionDb=beads_dashcode connectionID=4 error="Column \"no_history\" already exists" queryTime="2026-05-06 20:17:50.909937 -0400 EDT m=+1.700347854"
+time="2026-05-06T20:17:51-04:00" level=warning msg="error running query" connectTime="2026-05-06 20:17:49.888653 -0400 EDT m=+0.679055834" connectionDb=beads_dashcode connectionID=4 error="Column \"started_at\" already exists" queryTime="2026-05-06 20:17:51.110776 -0400 EDT m=+1.901187798"
