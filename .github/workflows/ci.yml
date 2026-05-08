@@ -99,9 +99,8 @@ jobs:
         run: ./gradlew :app:bundleRelease :mobile:bundleRelease
 
       - name: Write service account JSON
-        env:
-          SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
-        run: printf '%s' "$SERVICE_ACCOUNT_JSON" > $RUNNER_TEMP/play-service-account.json
+        run: |
+          echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}" | base64 --decode > $RUNNER_TEMP/play-service-account.json
 
       - name: Upload watch app to Play Store (internal track)
         uses: r0adkll/upload-google-play@v1.1.5
