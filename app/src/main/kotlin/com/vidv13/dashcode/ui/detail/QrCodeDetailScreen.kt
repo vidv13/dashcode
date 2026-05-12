@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalWearFoundationApi::class)
-
 package com.vidv13.dashcode.ui.detail
 
 import android.app.Activity
@@ -24,8 +22,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.wear.compose.foundation.AmbientAware
-import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.material3.CircularProgressIndicator
 import androidx.wear.compose.material3.Text
 
@@ -38,22 +34,16 @@ fun QrCodeDetailScreen(
 
     KeepScreenOn()
 
-    AmbientAware { ambientState ->
-        Box(
-            modifier = modifier
-                .fillMaxSize()
-                .background(if (ambientState.isAmbient) Color.Black else Color.White),
-            contentAlignment = Alignment.Center,
-        ) {
-            if (state.bitmap != null) {
-                if (ambientState.isAmbient) {
-                    AmbientQrContent(bitmap = state.bitmap!!, name = state.name)
-                } else {
-                    QrContent(name = state.name, bitmap = state.bitmap!!)
-                }
-            } else if (!ambientState.isAmbient) {
-                CircularProgressIndicator()
-            }
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(Color.White),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (state.bitmap != null) {
+            QrContent(name = state.name, bitmap = state.bitmap!!)
+        } else {
+            CircularProgressIndicator()
         }
     }
 }
@@ -73,15 +63,6 @@ private fun QrContent(name: String, bitmap: Bitmap) {
             modifier = Modifier.size(180.dp),
         )
     }
-}
-
-@Composable
-private fun AmbientQrContent(bitmap: Bitmap, name: String) {
-    Image(
-        bitmap = bitmap.asImageBitmap(),
-        contentDescription = name,
-        modifier = Modifier.size(180.dp),
-    )
 }
 
 @Composable
