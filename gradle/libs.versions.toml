@@ -3,7 +3,7 @@
 agp = "9.0.1"
 compileSdk = "35"
 minSdk = "30"
-targetSdk = "34"
+targetSdk = "35"
 
 # Kotlin (must match AGP 9.0.1's embedded KGP)
 kotlin = "2.2.10"
