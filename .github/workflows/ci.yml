@@ -109,7 +109,8 @@ jobs:
           serviceAccountJson: ${{ runner.temp }}/play-service-account.json
           packageName: com.vernonit.dashcode
           releaseFiles: app/build/outputs/bundle/release/app-release.aab
-          track: internal
+          tracks: internal
+          status: draft
 
       - name: Upload companion app to Play Store (internal track)
         uses: r0adkll/upload-google-play@v1.1.5
@@ -117,4 +118,5 @@ jobs:
           serviceAccountJson: ${{ runner.temp }}/play-service-account.json
           packageName: com.vernonit.dashcode
           releaseFiles: mobile/build/outputs/bundle/release/mobile-release.aab
-          track: internal
+          tracks: internal
+          status: draft
