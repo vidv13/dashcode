@@ -3,7 +3,6 @@
 package com.vidv13.dashcode.mobile.ui
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,11 +18,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -38,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.vidv13.dashcode.mobile.data.PhoneQrCode
+import com.vidv13.dashcode.mobile.util.detectCodeType
 
 @Composable
 fun QrCodeListScreen(
@@ -111,6 +113,7 @@ private fun CodeItem(
     code: PhoneQrCode,
     onLongClick: () -> Unit,
 ) {
+    val codeType = detectCodeType(code.content)
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -119,10 +122,14 @@ private fun CodeItem(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Column {
+        Column(modifier = Modifier.weight(1f)) {
             Text(text = code.name)
             Text(text = code.content, maxLines = 1)
         }
+        SuggestionChip(
+            onClick = {},
+            label = { Text(codeType.label) },
+        )
     }
 }
 

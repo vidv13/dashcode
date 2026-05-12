@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Top-left finder pattern (outer) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M18,18 L18,46 L46,46 L46,18 Z M24,24 L40,24 L40,40 L24,40 Z" />
+    <!-- Top-left finder pattern (inner) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M28,28 L36,28 L36,36 L28,36 Z" />
+
+    <!-- Top-right finder pattern (outer) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M62,18 L62,46 L90,46 L90,18 Z M68,24 L84,24 L84,40 L68,40 Z" />
+    <!-- Top-right finder pattern (inner) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M72,28 L80,28 L80,36 L72,36 Z" />
+
+    <!-- Bottom-left finder pattern (outer) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M18,62 L18,90 L46,90 L46,62 Z M24,68 L40,68 L40,84 L24,84 Z" />
+    <!-- Bottom-left finder pattern (inner) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M28,72 L36,72 L36,80 L28,80 Z" />
+
+    <!-- Data modules (bottom-right quadrant) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M56,56 L62,56 L62,62 L56,62 Z
+                          M70,56 L76,56 L76,62 L70,62 Z
+                          M84,56 L90,56 L90,62 L84,62 Z
+                          M56,70 L62,70 L62,76 L56,76 Z
+                          M84,70 L90,70 L90,76 L84,76 Z
+                          M56,84 L62,84 L62,90 L56,90 Z
+                          M70,84 L76,84 L76,90 L70,90 Z
+                          M84,84 L90,84 L90,90 L84,90 Z" />
+</vector>
