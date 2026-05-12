@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalWearFoundationApi::class)
+
 package com.vidv13.dashcode.ui.detail
 
 import android.app.Activity
@@ -13,7 +15,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -23,6 +24,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.wear.compose.foundation.AmbientAware
+import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.material3.CircularProgressIndicator
 import androidx.wear.compose.material3.Text
 
@@ -35,16 +38,22 @@ fun QrCodeDetailScreen(
 
     KeepScreenOn()
 
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(Color.White),
-        contentAlignment = Alignment.Center,
-    ) {
-        if (state.bitmap != null) {
-            QrContent(name = state.name, bitmap = state.bitmap!!)
-        } else {
-            CircularProgressIndicator()
+    AmbientAware { ambientState ->
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(if (ambientState.isAmbient) Color.Black else Color.White),
+            contentAlignment = Alignment.Center,
+        ) {
+            if (state.bitmap != null) {
+                if (ambientState.isAmbient) {
+                    AmbientQrContent(bitmap = state.bitmap!!, name = state.name)
+                } else {
+                    QrContent(name = state.name, bitmap = state.bitmap!!)
+                }
+            } else if (!ambientState.isAmbient) {
+                CircularProgressIndicator()
+            }
         }
     }
 }
@@ -64,6 +73,15 @@ private fun QrContent(name: String, bitmap: Bitmap) {
             modifier = Modifier.size(180.dp),
         )
     }
+}
+
+@Composable
+private fun AmbientQrContent(bitmap: Bitmap, name: String) {
+    Image(
+        bitmap = bitmap.asImageBitmap(),
+        contentDescription = name,
+        modifier = Modifier.size(180.dp),
+    )
 }
 
 @Composable

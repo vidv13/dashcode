@@ -16,7 +16,9 @@ android {
         applicationId = "com.vernonit.dashcode"
         minSdk = 26
         targetSdk = libs.versions.targetSdk.get().toInt()
-        versionCode = 1
+        versionCode = providers.exec {
+            commandLine("git", "rev-list", "--count", "HEAD")
+        }.standardOutput.asText.get().trim().toInt()
         versionName = "0.1.0"
     }
 
