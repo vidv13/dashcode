@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalWearFoundationApi::class)
-
 package com.vidv13.dashcode.ui.detail
 
 import android.app.Activity
@@ -24,8 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.wear.compose.foundation.AmbientAware
-import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
+import androidx.wear.compose.material3.AmbientAware
 import androidx.wear.compose.material3.CircularProgressIndicator
 import androidx.wear.compose.material3.Text
 
