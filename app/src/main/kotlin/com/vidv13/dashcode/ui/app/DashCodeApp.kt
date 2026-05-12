@@ -11,12 +11,17 @@ import com.vidv13.dashcode.ui.detail.QrCodeDetailScreen
 import com.vidv13.dashcode.ui.list.QrCodeListScreen
 
 @Composable
-fun DashCodeApp() {
+fun DashCodeApp(initialCodeId: Long? = null) {
     val navController = rememberSwipeDismissableNavController()
+    val startDestination = if (initialCodeId != null) {
+        Screen.Detail.createRoute(initialCodeId)
+    } else {
+        Screen.List.route
+    }
 
     SwipeDismissableNavHost(
         navController = navController,
-        startDestination = Screen.List.route,
+        startDestination = startDestination,
     ) {
         composable(Screen.List.route) {
             QrCodeListScreen(onCodeClick = { id ->

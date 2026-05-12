@@ -9,12 +9,18 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val initialCodeId = intent.getStringExtra(EXTRA_CODE_ID)?.toLongOrNull()
         setContent {
             DashCodeTheme {
-                DashCodeApp()
+                DashCodeApp(initialCodeId = initialCodeId)
             }
         }
+    }
+
+    companion object {
+        const val EXTRA_CODE_ID = "code_id"
     }
 }
