@@ -3,12 +3,9 @@ name: CI
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 permissions:
   contents: read
-  pull-requests: write
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -49,31 +46,10 @@ jobs:
             /tmp/app-build.log
             /tmp/mobile-build.log
 
-      - name: Post build error to PR
-        if: failure() && github.event_name == 'pull_request'
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          {
-            printf '## Build failed\n\n'
-            for module in app mobile; do
-              log="/tmp/${module}-build.log"
-              [ -f "$log" ] || continue
-              printf '### %s — compiler errors\n```\n' "$module"
-              grep -E "^e: |error:|Unresolved reference|None of the following|cannot find|is not applicable" "$log" | head -60
-              printf '\n```\n\n### %s — last 20 lines\n```\n' "$module"
-              tail -20 "$log"
-              printf '\n```\n\n'
-            done
-          } > /tmp/comment.md
-          gh pr comment "${{ github.event.pull_request.number }}" \
-            --repo "${{ github.repository }}" \
-            --body-file /tmp/comment.md
-
   deploy:
     runs-on: ubuntu-latest
     needs: build
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main'
 
     steps:
       - uses: actions/checkout@v4
