@@ -8,10 +8,9 @@ import androidx.wear.protolayout.LayoutElementBuilders
 import androidx.wear.protolayout.ModifiersBuilders
 import androidx.wear.protolayout.TimelineBuilders
 import androidx.wear.tiles.RequestBuilders
-import androidx.wear.tiles.ResourceBuilders
+import androidx.wear.protolayout.ResourceBuilders
 import androidx.wear.tiles.TileBuilders.Tile
 import androidx.wear.tiles.TileService
-import com.google.common.util.concurrent.Futures
 import com.google.common.util.concurrent.ListenableFuture
 import com.vidv13.dashcode.MainActivity
 import com.vidv13.dashcode.data.QrCodeRepository
@@ -43,9 +42,10 @@ class DashCodeTileService : TileService() {
             buildTile(code)
         }
 
-    @Suppress("RETURN_TYPE_MISMATCH")
-    override fun onTileResourcesRequest(requestParams: RequestBuilders.ResourcesRequest) =
-        Futures.immediateFuture(ResourceBuilders.Resources.Builder().setVersion("0").build())
+    override fun onTileResourcesRequest(requestParams: RequestBuilders.ResourcesRequest): ListenableFuture<ResourceBuilders.Resources> =
+        scope.future {
+            ResourceBuilders.Resources.Builder().setVersion("0").build()
+        }
 
     private fun buildTile(code: QrCode?): Tile {
         val codeName = code?.name ?: "No codes"
