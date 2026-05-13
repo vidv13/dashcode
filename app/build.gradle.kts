@@ -82,6 +82,9 @@ dependencies {
     implementation(libs.wear.compose.material3)
     implementation(libs.wear.compose.foundation)
     implementation(libs.wear.compose.navigation)
+    implementation(libs.tiles)
+    implementation(libs.protolayout.material)
+    implementation(libs.kotlinx.coroutines.guava)
 
     // Hilt
     implementation(libs.hilt.android)
