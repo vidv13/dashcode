@@ -43,6 +43,18 @@ class QrCodeViewModel @Inject constructor(
         }
     }
 
+    fun reorderCodes(from: Int, to: Int) {
+        viewModelScope.launch {
+            val current = codes.value.toMutableList()
+            if (from == to || from !in current.indices || to !in current.indices) return@launch
+            val item = current.removeAt(from)
+            current.add(to, item)
+            val updated = current.mapIndexed { index, code -> code.copy(sortOrder = index) }
+            store.save(updated)
+            syncToWatch(updated)
+        }
+    }
+
     private suspend fun syncToWatch(codes: List<PhoneQrCode>) {
         val request = PutDataMapRequest.create("/qr-codes").apply {
             dataMap.putString("codes", Json.encodeToString(codes))

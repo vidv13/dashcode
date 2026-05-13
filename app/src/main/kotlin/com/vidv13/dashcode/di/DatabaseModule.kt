@@ -2,6 +2,8 @@ package com.vidv13.dashcode.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.vidv13.dashcode.data.QrCodeRepository
 import com.vidv13.dashcode.data.QrCodeRepositoryImpl
 import com.vidv13.dashcode.data.local.QrCodeDao
@@ -14,6 +16,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+private val MIGRATION_1_2 = object : Migration(1, 2) {
+    override fun migrate(db: SupportSQLiteDatabase) {
+        db.execSQL("ALTER TABLE qr_codes ADD COLUMN sortOrder INTEGER NOT NULL DEFAULT 0")
+    }
+}
+
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class DatabaseModule {
@@ -25,7 +33,9 @@ abstract class DatabaseModule {
         @Provides
         @Singleton
         fun provideDatabase(@ApplicationContext context: Context): QrCodeDatabase =
-            Room.databaseBuilder(context, QrCodeDatabase::class.java, "dashcode.db").build()
+            Room.databaseBuilder(context, QrCodeDatabase::class.java, "dashcode.db")
+                .addMigrations(MIGRATION_1_2)
+                .build()
 
         @Provides
         fun provideDao(db: QrCodeDatabase): QrCodeDao = db.qrCodeDao()
