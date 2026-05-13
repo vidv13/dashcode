@@ -6,6 +6,7 @@ import com.google.android.gms.wearable.DataMapItem
 import com.google.android.gms.wearable.WearableListenerService
 import com.vidv13.dashcode.data.QrCodeRepository
 import com.vidv13.dashcode.data.local.QrCode
+import com.vidv13.dashcode.tile.DashCodeTileService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -30,7 +31,10 @@ class QrCodeSyncService : WearableListenerService() {
                 val dataMap = DataMapItem.fromDataItem(event.dataItem).dataMap
                 val codesJson = dataMap.getString(KEY_CODES) ?: return@forEach
                 val codes = lenientJson.decodeFromString<List<QrCode>>(codesJson)
-                scope.launch { repository.replaceAll(codes) }
+                scope.launch {
+                    repository.replaceAll(codes)
+                    DashCodeTileService.requestUpdate(applicationContext)
+                }
             }
         }
     }
