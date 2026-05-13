@@ -6,4 +6,5 @@ import kotlinx.serialization.Serializable
 data class PhoneQrCode(
     val name: String,
     val content: String,
+    val sortOrder: Int = 0,
 )

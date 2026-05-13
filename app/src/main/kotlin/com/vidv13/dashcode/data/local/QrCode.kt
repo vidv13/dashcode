@@ -10,4 +10,5 @@ data class QrCode(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
     val name: String,
     val content: String,
+    val sortOrder: Int = 0,
 )
