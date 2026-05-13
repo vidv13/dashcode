@@ -43,9 +43,7 @@ class DashCodeTileService : TileService() {
             buildTile(code)
         }
 
-    override fun onTileResourcesRequest(
-        requestParams: RequestBuilders.ResourcesRequest,
-    ): ListenableFuture<ResourceBuilders.Resources> =
+    override fun onTileResourcesRequest(requestParams: RequestBuilders.ResourcesRequest) =
         Futures.immediateFuture(ResourceBuilders.Resources.Builder().setVersion("0").build())
 
     private fun buildTile(code: QrCode?): Tile {
