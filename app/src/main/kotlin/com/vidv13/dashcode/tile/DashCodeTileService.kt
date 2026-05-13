@@ -43,10 +43,9 @@ class DashCodeTileService : TileService() {
             buildTile(code)
         }
 
+    @Suppress("RETURN_TYPE_MISMATCH")
     override fun onTileResourcesRequest(requestParams: RequestBuilders.ResourcesRequest) =
-        Futures.immediateFuture<ResourceBuilders.Resources?>(
-            ResourceBuilders.Resources.Builder().setVersion("0").build(),
-        )
+        Futures.immediateFuture(ResourceBuilders.Resources.Builder().setVersion("0").build())
 
     private fun buildTile(code: QrCode?): Tile {
         val codeName = code?.name ?: "No codes"
