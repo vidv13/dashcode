@@ -42,6 +42,7 @@ class DashCodeTileService : TileService() {
             buildTile(code)
         }
 
+    @Suppress("RETURN_TYPE_MISMATCH_ON_OVERRIDE")
     override fun onTileResourcesRequest(requestParams: RequestBuilders.ResourcesRequest): ListenableFuture<ResourceBuilders.Resources> =
         scope.future {
             ResourceBuilders.Resources.Builder().setVersion("0").build()
